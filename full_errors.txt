@@ -1,0 +1,2 @@
+src/components/ScrollyCanvas.tsx(29,31): error TS1127: Invalid character.
+src/components/ScrollyCanvas.tsx(112,1): error TS1160: Unterminated template literal.
