@@ -14,7 +14,7 @@ export default function HeroSection() {
                     numFrames={90}
                     basePath="/sequence/ezgif-frame-"
                     targetRef={heroRef}
-                    className="absolute inset-0 h-full w-full object-cover"
+                    className="absolute inset-0 h-full w-full object-cover object-[100%_center] md:object-center" // 100% Right on Mobile
                 />
                 <Overlay targetRef={heroRef} />
             </div>

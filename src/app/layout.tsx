@@ -1,24 +1,27 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import FloatingNav from "@/components/FloatingNav";
+import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-geist-sans",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
+  variable: "--font-geist-mono",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Pixel Webstar | High-Performance Digital Solutions",
-  description: "We build premium websites, perform SEO audits, and integrate AI solutions to scale your business. Pixel Webstar is your partner in digital transformation.",
+  title: "Pixel Webstar | Premium Web Design",
+  description: "Crafting digital experiences that dominate.",
   openGraph: {
-    title: "Pixel Webstar | Digital Alchemists",
-    description: "Transforming code into business growth. Premium Web Design, Development, and SEO.",
+    title: "Pixel Webstar | Premium Web Design",
+    description: "Crafting digital experiences that dominate.",
     url: "https://pixelwebstar.com",
     siteName: "Pixel Webstar",
     images: [
@@ -44,8 +47,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#121212] text-white`}
+        className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-[#0a0a0a] text-white`}
       >
+        <FloatingNav />
         <GoogleAnalytics />
         {children}
       </body>

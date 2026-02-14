@@ -11,7 +11,7 @@ const allFaqs = [
     { cat: "General", q: "How long does the process take?", a: "Typically 4-8 weeks for a standard marketing site, and 3-6 months for larger applications." },
     { cat: "Technical", q: "Do you offer hosting?", a: "Yes, we can manage hosting for you on premium platforms like Vercel or AWS, or hand off the code to your team." },
     { cat: "Technical", q: "Will my site be mobile friendly?", a: "100%. We design mobile-first to ensure a flawless experience on all devices." },
-    { cat: "Process", q: "What do you need from me to start?", a: "We'll need your branding assets (logo, fonts), content outline, and a clear understanding of your goals. We can help with all of this during discovery." },
+    { cat: "Process", q: "What do you need from me to start?", a: "We&apos;ll need your branding assets (logo, fonts), content outline, and a clear understanding of your goals. We can help with all of this during discovery." },
     { cat: "Support", q: "Do you offer post-launch support?", a: "Absolutely. We provide 30 days of free bug fixes and offer ongoing maintenance retainers." },
 ];
 

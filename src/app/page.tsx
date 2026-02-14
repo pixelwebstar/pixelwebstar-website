@@ -11,6 +11,8 @@ import ServiceCarousel from "@/components/ServiceCarousel";
 import Projects from "@/components/Projects";
 import Process from "@/components/Process";
 import Awards from "@/components/Awards";
+import SalesBridge from "@/components/SalesBridge";
+import ROICalculator from "@/components/ROICalculator";
 import FAQ from "@/components/FAQ";
 import FinalCTA from "@/components/FinalCTA";
 
@@ -24,6 +26,12 @@ export default function Home() {
 
             {/* 2. HOOK */}
             <TextHook />
+
+            {/* SALES BRIDGE */}
+            <SalesBridge />
+
+            {/* ROI CALCULATOR */}
+            <ROICalculator />
 
             {/* 3. CHART */}
             <div className="relative z-20 bg-[#121212]">

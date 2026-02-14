@@ -1,51 +1,86 @@
 "use client";
 
+import { useRef, useState, useEffect } from "react";
+import ScrollyCanvas from "@/components/ScrollyCanvas";
 import { motion, useScroll, useTransform } from "framer-motion";
-import ScrollyCanvas from "./ScrollyCanvas";
-import { useRef } from "react";
 
 export default function ChartSection() {
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
-        offset: ["start start", "end end"]
+        offset: ["start end", "end start"],
     });
 
-    // Animate text to appear earlier (0.5 to 0.8) to ensure visibility
-    const opacity = useTransform(scrollYProgress, [0.5, 0.8], [0, 1]);
-    const y = useTransform(scrollYProgress, [0.5, 0.8], [50, 0]);
+    const opacity = useTransform(scrollYProgress, [0.05, 0.2, 0.8, 0.95], [0, 1, 1, 0]);
+
+    const [step, setStep] = useState(0);
+
+    // Storytelling step logic
+    useEffect(() => {
+        const unsubscribe = scrollYProgress.on("change", (latest) => {
+            if (latest < 0.33) setStep(0);
+            else if (latest < 0.66) setStep(1);
+            else setStep(2);
+        });
+        return () => unsubscribe();
+    }, [scrollYProgress]);
+
+    const renderStepContent = () => {
+        switch (step) {
+            case 0: return (
+                <div className="text-red-400">
+                    <h3 className="text-xl font-bold mb-2">STAGE 1: NON-EXISTENT</h3>
+                    <p className="text-sm opacity-80 uppercase tracking-wider">Zero digital presence. Leaving 100% of revenue on the table.</p>
+                </div>
+            );
+            case 1: return (
+                <div className="text-blue-400">
+                    <h3 className="text-xl font-bold mb-2">STAGE 2: STANDARD</h3>
+                    <p className="text-sm opacity-80 uppercase tracking-wider">Generic template. High bounce rates. capturing baseline traffic only.</p>
+                </div>
+            );
+            case 2: return (
+                <div className="text-purple-400">
+                    <h3 className="text-xl font-bold mb-2">STAGE 3: PIXELWEBSTAR</h3>
+                    <p className="text-sm opacity-80 uppercase tracking-wider">Optimized performance. exponential scaling and market dominance.</p>
+                </div>
+            );
+            default: return null;
+        }
+    };
 
     return (
-        <section ref={containerRef} className="relative z-10 min-h-[400vh] bg-[#121212]">
-            <div className="sticky top-0 h-screen w-full">
-                {/* Using the chart sequence with 120 frames */}
-                <ScrollyCanvas
-                    numFrames={120}
-                    basePath="/chart-sequence/ezgif-frame-"
-                    className="z-0"
-                    targetRef={containerRef}
-                />
+        <section ref={containerRef} className="relative h-[200vh] w-full bg-[#0a0a0a]">
+            <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center px-6 overflow-hidden">
 
-                {/* Overlay Text for the Chart Story - IMPROVED READABILITY */}
+                {/* Compact Boxed Visualization */}
+                <div className="relative w-full max-w-4xl aspect-video bg-white/5 border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl backdrop-blur-xl">
+                    <ScrollyCanvas
+                        numFrames={120}
+                        basePath="/chart-sequence/ezgif-frame-"
+                        className="z-0 h-full w-full object-contain opacity-90"
+                        targetRef={containerRef}
+                    />
+
+                    {/* Inner Shadows for framing */}
+                    <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.5)]" />
+                </div>
+
+                {/* Narrative Overlay - Way Smaller and Fixed Below Chart */}
                 <motion.div
-                    style={{ opacity, y }}
-                    className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-end pb-32 px-6 md:px-24"
+                    style={{ opacity }}
+                    className="mt-12 w-full max-w-xl z-20"
                 >
-                    {/* Added a gradient background to ensure text is readable regardless of the image behind it */}
-                    <div className="max-w-4xl bg-gradient-to-t from-black/90 via-black/50 to-transparent p-8 md:p-12 rounded-3xl backdrop-blur-sm border border-white/5">
-                        <h2 className="text-5xl font-bold text-white md:text-7xl mb-6 leading-tight drop-shadow-lg">
-                            The Cost of <span className="text-red-500">Invisibility.</span>
-                        </h2>
-                        <p className="text-xl text-white/90 md:text-3xl leading-relaxed font-light drop-shadow-md">
-                            Businesses without optimized websites leave revenue on the table.
-                            <br /><br />
-                            <span className="text-red-400 font-bold bg-white/10 px-2 py-1 rounded"> Irregular sites</span> confuse customers.
-                            <br />
-                            <span className="text-green-400 font-bold bg-white/10 px-2 py-1 rounded"> Optimized sites</span> drive growth.
-                        </p>
+                    <div className="bg-black/40 border border-white/5 p-8 rounded-3xl backdrop-blur-md text-center shadow-xl">
+                        {renderStepContent()}
                     </div>
                 </motion.div>
+
+                {/* Subtle Background Elements */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/5 blur-[120px] rounded-full -z-10" />
             </div>
         </section>
     );
 }
+
+

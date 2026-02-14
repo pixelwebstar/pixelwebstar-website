@@ -1,7 +1,7 @@
 "use client";
 
 import { useScroll, useTransform, useMotionValueEvent } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 
 interface ScrollyCanvasProps {
@@ -53,7 +53,7 @@ export default function ScrollyCanvas({
           setImages([firstImg]); // Set partially to show something
           setFirstFrameLoaded(true);
         }
-      } catch (e) {
+      } catch {
         console.error("Failed to load first frame");
       }
 
@@ -89,7 +89,7 @@ export default function ScrollyCanvas({
   }, [numFrames, basePath, imageExtension]);
 
   // Handle Canvas Rendering
-  const renderFrame = (index: number) => {
+  const renderFrame = useCallback((index: number) => {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
     // Fallback to first image if current not yet loaded (during progressive load)
@@ -106,12 +106,17 @@ export default function ScrollyCanvas({
 
     // Calculate scaling to cover the canvas
     const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
-    const x = (canvas.width / 2) - (img.width / 2) * scale;
+    let x = (canvas.width / 2) - (img.width / 2) * scale;
     const y = (canvas.height / 2) - (img.height / 2) * scale;
+
+    // Mobile Offset Enhancement: Shift image right for better composition on small screens
+    if (canvas.width < 768) {
+      x += canvas.width * 0.05; // Subtle 5% shift
+    }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
-  };
+  }, [images]);
 
   // Bind Scroll to Frames
   const frameIndex = useTransform(scrollYProgress, [0, 1], [0, numFrames - 1]);
@@ -128,14 +133,14 @@ export default function ScrollyCanvas({
     if (firstFrameLoaded) {
       renderFrame(0);
     }
-  }, [firstFrameLoaded]);
+  }, [firstFrameLoaded, renderFrame]);
 
   return (
     <div className={cn("sticky top-0 h-screen w-full overflow-hidden bg-[#121212]", className)}>
       <canvas
         ref={canvasRef}
         className={cn(
-          "h-full w-full object-cover transition-opacity duration-1000",
+          "h-full w-full transition-opacity duration-1000",
           firstFrameLoaded ? "opacity-100" : "opacity-0"
         )}
       />
